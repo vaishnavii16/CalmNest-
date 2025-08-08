@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Level Detection</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap">
+    <link rel="icon" href="https://source.unsplash.com/1600x900/?healthcare">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- React & ReactDOM -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+
+    <script src="/static/assets/js/components/BreathingTimer.js"></script>
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input.search-bar {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input.search-bar:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-info {
+            background-color: #007bff;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn-info:hover {
+            background-color: #0056b3;
+        }
+
+        .butn {
+            margin-top: 10px;
+        }
+
+        #breathing-exercise {
+            text-align: center;
+            font-size: 16px;
+            color: #fff;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            max-width: 300px;
+            width: 90%;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 15px;
+            }
+
+            h3 {
+                font-size: 18px;
+            }
+
+            input.search-bar {
+                font-size: 13px;
+            }
+
+            .btn-info {
+                font-size: 13px;
+                padding: 6px;
+            }
+
+            #breathing-exercise {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h3><u>Detect your Stress Level</u></h3>
+        <form action="{{ url_for('stressdetect') }}" method="post">
+            <div class="mb-2">
+                <h5>Enter Sleeping Hours</h5>
+                <input type="number" class="search-bar" name="rr" max="24" min="1" placeholder="1 to 24" required />
+            </div>
+            <div class="mb-2">
+                <h5>Enter Blood Pressure Rate</h5>
+                <input type="number" class="search-bar" name="bp" max="200" min="90" placeholder="90 to 200" required />
+            </div>
+            <div class="mb-2">
+                <h5>Enter Respiration Rate</h5>
+                <input type="number" class="search-bar" name="bo" min="100" max="700" placeholder="100 to 700" required />
+            </div>
+            <div class="mb-2">
+                <h5>Enter Maximum Heart Rate</h5>
+                <input type="number" class="search-bar" name="hr" min="50" max="200" placeholder="50 to 200" required />
+            </div>
+            <div class="butn">
+                <button type="submit" class="btn btn-info"><b>Predict</b></button>
+            </div>
+        </form>
+
+        <div class="butn"><b>{{ prediction_text3 }}</b></div>
+    </div>
+
+    <div id="breathing-exercise">
+        <h3>🧘‍♀️ Relax & Breathe</h3>
+        <p id="breathing-text">Breathe In... Hold... Breathe Out...</p>
+    </div>
+
+    <script>
+        const breathingText = document.getElementById("breathing-text");
+        const breathingSteps = ["Breathe In... 😌", "Hold... 🫁", "Breathe Out... 😮‍💨", "Relax... 🧘‍♂️"];
+        let stepIndex = 0;
+
+        function updateBreathing() {
+            breathingText.innerText = breathingSteps[stepIndex];
+            stepIndex = (stepIndex + 1) % breathingSteps.length;
+        }
+
+        setInterval(updateBreathing, 4000); // Changes every 4 seconds
+    </script>
+
+    <!-- Bootstrap & jQuery Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="static/js/BreathingTimer.js"></script> 
+
+</body>
+</html>

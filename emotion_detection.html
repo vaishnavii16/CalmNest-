@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Emotion Detection</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body style="background-color: #121212; color: white;">
+
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Emotion Detection</h1>
+    <p class="text-center mb-5">Enter a sentence or phrase and we'll detect the emotion behind your words.</p>
+
+    <form method="POST" action="/emotion_detection">
+      <div class="mb-3">
+        <textarea class="form-control" name="user_text" rows="4" placeholder="Type something..." required></textarea>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Detect Emotion</button>
+      </div>
+    </form>
+
+    {% if emotion %}
+      <div class="mt-5 text-center">
+        <h3>Detected Emotion:</h3>
+        <p style="font-size: 1.5rem; font-weight: bold;">{{ emotion }}</p>
+
+        <h4 class="mt-4">Motivational Quote:</h4>
+        <p id="quoteText" style="font-style: italic; font-size: 1.2rem;">"{{ quote }}"</p>
+
+        <button class="btn btn-secondary mt-3" onclick="speakQuote()">🔊 Speak Quote</button>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    function speakQuote() {
+      const quote = document.getElementById("quoteText").innerText;
+      const utterance = new SpeechSynthesisUtterance(quote);
+      utterance.rate = 1; 
+      utterance.pitch = 1; 
+      speechSynthesis.speak(utterance);
+    }
+  </script>
+
+</body>
+</html>
